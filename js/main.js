@@ -4,6 +4,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  initOwnerDropdown();
   initMadeByDropdown();
   initHeader();
   initReservationDates();
@@ -13,14 +14,48 @@ document.addEventListener('DOMContentLoaded', () => {
   initEnquiryForms();
 });
 
-// 0. Made By Click-Down Dropdown Menu
-function initMadeByDropdown() {
-  const dropdown = document.getElementById('madeByDropdown');
-  const trigger = document.getElementById('madeByTrigger');
+// 0. Owner Click-Down Dropdown Menu
+function initOwnerDropdown() {
+  const dropdown = document.getElementById('ownerDropdown');
+  const trigger = document.getElementById('ownerTrigger');
+  const madeByDropdown = document.getElementById('madeByDropdown');
 
   if (dropdown && trigger) {
     trigger.addEventListener('click', (e) => {
       e.stopPropagation();
+      if (madeByDropdown) madeByDropdown.classList.remove('open');
+      const isOpen = dropdown.classList.toggle('open');
+      trigger.setAttribute('aria-expanded', isOpen);
+    });
+
+    // Close when clicking anywhere outside
+    document.addEventListener('click', (e) => {
+      if (!dropdown.contains(e.target)) {
+        dropdown.classList.remove('open');
+        trigger.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && dropdown.classList.contains('open')) {
+        dropdown.classList.remove('open');
+        trigger.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+}
+
+// 0b. Made By Click-Down Dropdown Menu
+function initMadeByDropdown() {
+  const dropdown = document.getElementById('madeByDropdown');
+  const trigger = document.getElementById('madeByTrigger');
+  const ownerDropdown = document.getElementById('ownerDropdown');
+
+  if (dropdown && trigger) {
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (ownerDropdown) ownerDropdown.classList.remove('open');
       const isOpen = dropdown.classList.toggle('open');
       trigger.setAttribute('aria-expanded', isOpen);
     });
