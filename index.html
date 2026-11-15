@@ -167,44 +167,8 @@
   <!-- Main Site Header -->
   <header class="site-header" role="banner">
     <div class="container header-inner">
-      <!-- Left side: Owner & Made By click-down menus directly beside the Dollhouse logo -->
+      <!-- Left side: Made By click-down menu directly beside the Dollhouse logo -->
       <div class="header-left-group">
-        <!-- Owner Option Dropdown -->
-        <div class="owner-dropdown" id="ownerDropdown">
-          <button class="owner-trigger" id="ownerTrigger" aria-expanded="false" aria-haspopup="true" aria-label="Hotel Owner information menu">
-            <img src="assets/images/owner-dk-ghosh.webp" alt="D.K. Ghosh" class="owner-trigger-avatar" width="22" height="22">
-            <span class="owner-text">Owner</span>
-            <svg class="owner-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
-          </button>
-          <div class="owner-menu" id="ownerMenu" role="menu">
-            <div class="owner-card">
-              <div class="owner-header-row">
-                <div class="owner-avatar-ring">
-                  <img src="assets/images/owner-dk-ghosh.webp" alt="D.K. Ghosh, Owner of Hotel Dollhouse" class="owner-card-avatar" width="64" height="64">
-                  <span class="owner-crown-icon" aria-hidden="true">👑</span>
-                </div>
-                <div class="owner-title-block">
-                  <span class="owner-role-badge">Owner &amp; Proprietor</span>
-                  <h4 class="owner-full-name">D.K. Ghosh</h4>
-                  <span class="owner-hotel-sub">Hotel Dollhouse · Old Digha</span>
-                </div>
-              </div>
-              <div class="owner-card-divider"></div>
-              <p class="owner-welcome-text">"Welcome to Hotel Dollhouse! We take personal pride in delivering peaceful, hospitable, and family-friendly beach holidays in Old Digha's serene Barrister Colony."</p>
-              <div class="owner-card-actions">
-                <a href="tel:+919433171430" class="owner-contact-pill owner-call-pill">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                  <span>Direct Call</span>
-                </a>
-                <a href="https://wa.me/919433171430?text=Hello%20Mr.%20D.K.%20Ghosh,%20I%20would%20like%20to%20inquire%20about%20booking%20at%20Hotel%20Dollhouse." target="_blank" rel="noopener noreferrer" class="owner-contact-pill owner-wa-pill">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                  <span>WhatsApp</span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <!-- Made By Dropdown -->
         <div class="made-by-dropdown" id="madeByDropdown">
           <button class="made-by-trigger" id="madeByTrigger" aria-expanded="false" aria-haspopup="true" aria-label="Creator info menu">
@@ -261,6 +225,37 @@
   </header>
 
   <main id="main-content">
+    <!-- Still Always-Visible Owner Bar (Directly Below Header on Main Page) -->
+    <section class="owner-always-visible-bar" aria-label="Hotel Owner Information">
+      <div class="container owner-visible-inner">
+        <div class="owner-visible-profile">
+          <div class="owner-visible-avatar-wrap">
+            <img src="assets/images/owner-dk-ghosh.webp" alt="D.K. Ghosh, Owner of Hotel Dollhouse" class="owner-visible-avatar" width="52" height="52">
+            <span class="owner-visible-crown" aria-hidden="true">👑</span>
+          </div>
+          <div class="owner-visible-meta">
+            <span class="owner-visible-badge">Hotel Owner &amp; Proprietor</span>
+            <h2 class="owner-visible-name">D.K. Ghosh</h2>
+            <span class="owner-visible-hotel">Hotel Dollhouse · Old Digha</span>
+          </div>
+        </div>
+
+        <div class="owner-visible-quote">
+          <span class="owner-quote-mark">“</span>Welcome to Hotel Dollhouse! We take personal pride in delivering peaceful, hospitable, and family-friendly beach holidays in Old Digha's serene Barrister Colony.<span class="owner-quote-mark">”</span>
+        </div>
+
+        <div class="owner-visible-actions">
+          <a href="tel:+919433171430" class="owner-action-pill owner-call-pill" title="Call D.K. Ghosh / Front Desk">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            <span>Call +91 9433171430</span>
+          </a>
+          <a href="https://wa.me/919433171430?text=Hello%20Mr.%20D.K.%20Ghosh,%20I%20would%20like%20to%20inquire%20about%20booking%20at%20Hotel%20Dollhouse." target="_blank" rel="noopener noreferrer" class="owner-action-pill owner-wa-pill" title="Chat on WhatsApp">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+            <span>WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </section>
     <!-- Hero Section -->
     <section id="hero" class="hero-section" aria-label="Welcome to Hotel Dollhouse">
       <div class="hero-media-wrapper">
