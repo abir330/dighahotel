@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "name": "Subhashish Banerjee",
+    "location": "South Kolkata",
+    "rating": 5,
+    "date": "October 2026",
+    "room": "Executive Suite with Balcony",
+    "title": "Peaceful family holiday just 2 mins from sea beach",
+    "comment": "Hotel Dollhouse in Barrister Colony is a hidden gem. Far away from the noisy New Digha commercial rush, yet the sea beach is literally a 2-minute stroll. The carved teak wood bed and ambient ceiling lighting were stunning. Clean western bathroom and prompt service. Highly recommended for families!"
+  },
+  {
+    "id": 2,
+    "name": "Priyanka & Anirban Das",
+    "location": "Salt Lake, Kolkata",
+    "rating": 5,
+    "date": "September 2026",
+    "room": "Royal Emerald Dome Room",
+    "title": "Mesmerizing dome ceiling and very courteous owner",
+    "comment": "We booked the Royal Emerald Dome Room directly via WhatsApp with Mr. D.K. Ghosh. The glowing dome false ceiling looks magical at night. Spotless linens, quiet split AC, and safe gated car parking. Best rate without any third-party app commission."
+  },
+  {
+    "id": 3,
+    "name": "Debabrata Sengupta",
+    "location": "Burdwan, West Bengal",
+    "rating": 5,
+    "date": "August 2026",
+    "room": "Deluxe Ambient AC Room",
+    "title": "Spotless rooms and genuinely warm hospitality",
+    "comment": "Stayed for 3 nights with my elderly parents. They loved the quiet residential neighborhood of Barrister Colony. Running hot and cold water 24/7, very comfortable mattress, and the staff helped us with fresh tea and food arrangements promptly."
+  },
+  {
+    "id": 4,
+    "name": "Amitava Roy",
+    "location": "Howrah",
+    "rating": 5,
+    "date": "July 2026",
+    "room": "Executive Suite with Balcony",
+    "title": "Fresh sea breeze from the private balcony",
+    "comment": "The private balcony in the Executive Suite was perfect for evening chats with the sea breeze blowing in. Fast direct WhatsApp check-in and hassle-free UPI payment on arrival. We will definitely visit again!"
+  }
+]

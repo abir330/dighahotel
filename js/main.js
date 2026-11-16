@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initReservationDates();
   initGalleryFilterAndModal();
   initSightseeingFilter();
+  initReviews();
+  initPolicyAccordion();
   initFAQAccordion();
   initEnquiryForms();
 });
@@ -259,6 +261,76 @@ function initGalleryFilterAndModal() {
     if (e.key === 'Escape') closeModal();
     if (e.key === 'ArrowRight') showNext();
     if (e.key === 'ArrowLeft') showPrev();
+  });
+}
+
+// 4.5 Guest Reviews Dynamic Loader
+async function initReviews() {
+  const container = document.getElementById('reviewsContainer');
+  if (!container) return;
+
+  try {
+    const res = await fetch('data/reviews.json');
+    if (!res.ok) return;
+    const reviews = await res.json();
+    if (!Array.isArray(reviews) || reviews.length === 0) return;
+
+    const html = reviews.map(rev => {
+      const initials = rev.name.split(' ').map(n => n[0]).filter(Boolean).slice(0, 2).join('').toUpperCase();
+      const stars = '★'.repeat(rev.rating || 5);
+      return `
+        <article class="review-card">
+          <div class="review-header">
+            <div class="review-stars">${stars}</div>
+            <span class="review-date">${rev.date}</span>
+          </div>
+          <h3 class="review-title">${rev.title}</h3>
+          <p class="review-comment">“${rev.comment}”</p>
+          <div class="review-author-wrap">
+            <div class="review-avatar">${initials}</div>
+            <div class="review-author-meta">
+              <span class="review-author-name">${rev.name}</span>
+              <span class="review-author-room">${rev.room} · ${rev.location}</span>
+            </div>
+          </div>
+        </article>
+      `;
+    }).join('');
+
+    container.innerHTML = html;
+  } catch (err) {
+    console.warn('Reviews loaded from semantic fallback:', err);
+  }
+}
+
+// 4.6 Stay Policies Accordion
+function initPolicyAccordion() {
+  const policyItems = document.querySelectorAll('.policy-item');
+  if (!policyItems.length) return;
+
+  policyItems.forEach(item => {
+    const questionBtn = item.querySelector('.policy-question');
+    const answer = item.querySelector('.policy-answer');
+    if (!questionBtn || !answer) return;
+
+    questionBtn.addEventListener('click', () => {
+      const isActive = item.classList.contains('active');
+
+      // Close all
+      policyItems.forEach(otherItem => {
+        otherItem.classList.remove('active');
+        const otherAnswer = otherItem.querySelector('.policy-answer');
+        if (otherAnswer) otherAnswer.style.maxHeight = null;
+        const otherBtn = otherItem.querySelector('.policy-question');
+        if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
+      });
+
+      if (!isActive) {
+        item.classList.add('active');
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+        questionBtn.setAttribute('aria-expanded', 'true');
+      }
+    });
   });
 }
 
