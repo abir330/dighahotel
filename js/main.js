@@ -6,6 +6,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   initLiveWeather();
   initHeader();
+  initHeroMotion();
+  initLanguageToggle();
   initReservationDates();
   initGalleryFilterAndModal();
   initSightseeingFilter();
@@ -210,30 +212,74 @@ function initReservationDates() {
   }
 }
 
-// 3. Sightseeing Tab Filter
+// 3. Sightseeing 8 Default + Show All 20 Filter
 function initSightseeingFilter() {
   const tabs = document.querySelectorAll('.sightseeing-nav-tabs .tab-btn');
-  const cards = document.querySelectorAll('.sightseeing-card');
+  const cards = Array.from(document.querySelectorAll('.sightseeing-card'));
+  const toggleBtn = document.getElementById('toggleAttractionsBtn');
+  const toggleText = document.getElementById('toggleAttractionsText');
+
+  let currentCategory = 'all';
+  let isExpanded = false;
+  const DEFAULT_LIMIT = 8;
+
+  function renderCards() {
+    let matchingCards = [];
+    cards.forEach(card => {
+      const match = currentCategory === 'all' || card.dataset.category === currentCategory;
+      if (match) {
+        matchingCards.push(card);
+      } else {
+        card.style.display = 'none';
+        card.classList.remove('collapsed-hidden');
+      }
+    });
+
+    matchingCards.forEach((card, index) => {
+      card.style.display = 'flex';
+      if (!isExpanded && index >= DEFAULT_LIMIT) {
+        card.classList.add('collapsed-hidden');
+      } else {
+        card.classList.remove('collapsed-hidden');
+      }
+    });
+
+    if (toggleBtn) {
+      if (matchingCards.length <= DEFAULT_LIMIT) {
+        toggleBtn.style.display = 'none';
+      } else {
+        toggleBtn.style.display = 'inline-flex';
+        toggleBtn.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
+        if (toggleText) {
+          toggleText.textContent = isExpanded 
+            ? 'Show Fewer Attractions' 
+            : `Show All ${matchingCards.length} Attractions`;
+        }
+      }
+    }
+  }
 
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       tabs.forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
-
-      const category = tab.dataset.category;
-
-      cards.forEach(card => {
-        if (category === 'all' || card.dataset.category === category) {
-          card.style.display = 'flex';
-        } else {
-          card.style.display = 'none';
-        }
-      });
+      currentCategory = tab.dataset.category || 'all';
+      renderCards();
     });
   });
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      isExpanded = !isExpanded;
+      renderCards();
+    });
+  }
+
+  // Initial render with first 8
+  renderCards();
 }
 
-// 4. Photo Gallery Filter & Lightbox Modal
+// 4. Bento Photo Gallery & Accessible Lightbox (Swipe, Arrow keys, Esc, Focus Trap)
 function initGalleryFilterAndModal() {
   const filterTabs = document.querySelectorAll('.gallery-filter-tabs .tab-btn');
   const galleryItems = document.querySelectorAll('.gallery-item');
@@ -246,6 +292,7 @@ function initGalleryFilterAndModal() {
 
   let activeList = Array.from(galleryItems);
   let currentIndex = 0;
+  let lastActiveElement = null;
 
   // Filter tabs
   filterTabs.forEach(tab => {
@@ -267,17 +314,26 @@ function initGalleryFilterAndModal() {
     });
   });
 
-  // Modal open
+  // Modal open on click and keyboard Enter/Space
   galleryItems.forEach(item => {
-    item.addEventListener('click', () => {
+    const triggerOpen = () => {
       currentIndex = activeList.indexOf(item);
       if (currentIndex === -1) currentIndex = 0;
       openModal();
+    };
+
+    item.addEventListener('click', triggerOpen);
+    item.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        triggerOpen();
+      }
     });
   });
 
   function openModal() {
     if (!activeList.length) return;
+    lastActiveElement = document.activeElement;
     const targetItem = activeList[currentIndex];
     const fullSrc = targetItem.dataset.full || targetItem.querySelector('img').src;
     const caption = targetItem.dataset.caption || '';
@@ -286,19 +342,27 @@ function initGalleryFilterAndModal() {
     modalCaption.textContent = caption;
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
+
+    // Focus close button initially
+    if (closeBtn) closeBtn.focus();
   }
 
   function closeModal() {
     modal.classList.remove('active');
     document.body.style.overflow = '';
+    if (lastActiveElement && typeof lastActiveElement.focus === 'function') {
+      lastActiveElement.focus();
+    }
   }
 
   function showNext() {
+    if (!activeList.length) return;
     currentIndex = (currentIndex + 1) % activeList.length;
     openModal();
   }
 
   function showPrev() {
+    if (!activeList.length) return;
     currentIndex = (currentIndex - 1 + activeList.length) % activeList.length;
     openModal();
   }
@@ -311,15 +375,206 @@ function initGalleryFilterAndModal() {
     modal.addEventListener('click', (e) => {
       if (e.target === modal) closeModal();
     });
+
+    // Touch Swipe Support
+    let touchStartX = 0;
+    let touchStartY = 0;
+    modal.addEventListener('touchstart', (e) => {
+      if (e.touches && e.touches.length === 1) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }
+    }, { passive: true });
+
+    modal.addEventListener('touchend', (e) => {
+      if (e.changedTouches && e.changedTouches.length === 1) {
+        const touchEndX = e.changedTouches[0].clientX;
+        const touchEndY = e.changedTouches[0].clientY;
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+
+        // Ensure horizontal swipe dominant
+        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 40) {
+          if (deltaX < 0) {
+            showNext();
+          } else {
+            showPrev();
+          }
+        }
+      }
+    }, { passive: true });
   }
 
-  // Keyboard navigation
+  // Keyboard navigation & Focus Trap
   document.addEventListener('keydown', (e) => {
     if (!modal.classList.contains('active')) return;
-    if (e.key === 'Escape') closeModal();
-    if (e.key === 'ArrowRight') showNext();
-    if (e.key === 'ArrowLeft') showPrev();
+
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      closeModal();
+      return;
+    }
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      showNext();
+      return;
+    }
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      showPrev();
+      return;
+    }
+
+    if (e.key === 'Tab') {
+      const focusable = [closeBtn, prevBtn, nextBtn].filter(Boolean);
+      if (!focusable.length) return;
+
+      const firstEl = focusable[0];
+      const lastEl = focusable[focusable.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstEl) {
+          e.preventDefault();
+          lastEl.focus();
+        }
+      } else {
+        if (document.activeElement === lastEl) {
+          e.preventDefault();
+          firstEl.focus();
+        }
+      }
+    }
   });
+}
+
+// 4.2 Hero Video Prefers-Reduced-Motion Support
+function initHeroMotion() {
+  const video = document.querySelector('.hero-video');
+  if (!video) return;
+
+  const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const handleMotionChange = (e) => {
+    if (e.matches) {
+      video.pause();
+    } else {
+      video.play().catch(() => {});
+    }
+  };
+
+  handleMotionChange(motionQuery);
+  if (motionQuery.addEventListener) {
+    motionQuery.addEventListener('change', handleMotionChange);
+  }
+}
+
+// 4.3 EN / বাংলা Dynamic Language Toggle
+function initLanguageToggle() {
+  const toggleBtn = document.getElementById('langToggleBtn');
+  if (!toggleBtn) return;
+
+  const pills = toggleBtn.querySelectorAll('.lang-pill');
+
+  const translations = {
+    en: {
+      'nav-home': 'Home',
+      'nav-about': 'About',
+      'nav-rooms': 'Rooms',
+      'nav-amenities': 'Amenities',
+      'nav-guide': 'Digha Guide',
+      'nav-gallery': 'Gallery',
+      'nav-reviews': 'Reviews',
+      'nav-policies': 'Policies',
+      'nav-location': 'Location',
+      'nav-contact': 'Contact',
+      'cta-contact': 'Contact Us',
+      'hero-eyebrow': 'Boutique Coastal Retreat · Old Digha',
+      'hero-title': 'Experience Unhurried Hospitality by the Bay of Bengal',
+      'hero-subtitle': 'Nestled within the serene residential canopy of Barrister Colony, Hotel Dollhouse offers air-conditioned comfort, handcrafted woodwork, and ambient designer ceilings — just 2 minutes from Old Digha\'s sea beach.',
+      'badge-beach': '2 Min Walk to Sea Beach',
+      'badge-station': '5 Min to Railway Station',
+      'badge-couples': 'Family & Couple Friendly',
+      'badge-owner': 'Direct Owner Booking',
+      'btn-explore': 'Explore Rooms',
+      'btn-call': 'Direct Call +91 9433171430',
+      'about-eyebrow': 'Discover Hotel Dollhouse',
+      'about-title': 'A Peaceful Haven in Old Digha\'s Barrister Colony',
+      'rooms-eyebrow': 'Accommodations & Comfort',
+      'rooms-title': 'Rooms Crafted for Restful Coastal Getaways',
+      'reviews-eyebrow': 'Guest Impressions',
+      'reviews-title': 'Loved by Families & Travelers in Old Digha',
+      'policies-eyebrow': 'Stay Guidelines & Transparency',
+      'policies-title': 'Hotel Policies & Stay Guidelines',
+      'contact-eyebrow': 'Connect Directly',
+      'contact-title': 'Plan Your Digha Holiday with Us'
+    },
+    bn: {
+      'nav-home': 'নীড়',
+      'nav-about': 'পরিচিতি',
+      'nav-rooms': 'রুমসমূহ',
+      'nav-amenities': 'সুবিধাসমূহ',
+      'nav-guide': 'দীঘা গাইড',
+      'nav-gallery': 'গ্যালারি',
+      'nav-reviews': 'রিভিউ',
+      'nav-policies': 'নিয়মাবলী',
+      'nav-location': 'লোকেশন',
+      'nav-contact': 'যোগাযোগ',
+      'cta-contact': 'যোগাযোগ',
+      'hero-eyebrow': 'বুটিক কোস্টাল রিট্রিট · ওল্ড দীঘা',
+      'hero-title': 'বঙ্গোপসাগরের কোল ঘেঁষে শান্ত ও মনোরম অবকাশ',
+      'hero-subtitle': 'ব্যারিস্টার কলোনির শান্ত ছায়াঘেরা পরিবেশে হোটেল ডলহাউস দিচ্ছে এসি স্বাচ্ছন্দ্য, কাঠের কারুকার্য ও আধুনিক সিলিং—ওল্ড দীঘা সমুদ্র সৈকত থেকে মাত্র ২ মিনিটের হাঁটা পথ।',
+      'badge-beach': '২ মিনিটে সমুদ্র সৈকত',
+      'badge-station': '৫ মিনিটে দীঘা স্টেশন',
+      'badge-couples': 'পরিবার ও কাপল ফ্রেন্ডলি',
+      'badge-owner': 'সরাসরি মালিকের সাথে বুকিং',
+      'btn-explore': 'রুম দেখুন',
+      'btn-call': 'সরাসরি কল +91 9433171430',
+      'about-eyebrow': 'হোটেল ডলহাউসের সাথে পরিচিত হোন',
+      'about-title': 'ওল্ড দীঘার ব্যারিস্টার কলোনিতে শান্ত শান্তির নীড়',
+      'rooms-eyebrow': 'থাকার ব্যবস্থা ও সুযোগ-সুবিধা',
+      'rooms-title': 'আরামদায়ক উপকূলীয় ছুটির জন্য সাজানো রুম',
+      'reviews-eyebrow': 'অতিথিদের মতামত',
+      'reviews-title': 'ওল্ড দীঘায় পরিবার ও ভ্রমণকারীদের বিশ্বস্ত ঠিকানা',
+      'policies-eyebrow': 'নিয়মাবলী ও স্বচ্ছতা',
+      'policies-title': 'হোটেল পলিসি ও অতিথিদের গাইডলাইন',
+      'contact-eyebrow': 'সরাসরি কথা বলুন',
+      'contact-title': 'হোটেল ডলহাউসে আপনার বুকিং নিশ্চিত করুন'
+    }
+  };
+
+  let currentLang = localStorage.getItem('dollhouse_lang') || 'en';
+
+  function applyLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('dollhouse_lang', lang);
+    document.documentElement.lang = lang;
+
+    pills.forEach(p => {
+      p.classList.toggle('active', p.dataset.lang === lang);
+    });
+
+    const dict = translations[lang] || translations.en;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key]) {
+        const svg = el.querySelector('svg');
+        if (svg) {
+          el.innerHTML = '';
+          el.appendChild(svg);
+          el.appendChild(document.createTextNode(' ' + dict[key]));
+        } else {
+          el.textContent = dict[key];
+        }
+      }
+    });
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    applyLanguage(currentLang === 'en' ? 'bn' : 'en');
+  });
+
+  if (currentLang !== 'en') {
+    applyLanguage(currentLang);
+  }
 }
 
 // 4.5 Guest Reviews Dynamic Loader

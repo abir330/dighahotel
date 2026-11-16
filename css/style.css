@@ -24,8 +24,8 @@
   --border-delicate: rgba(0, 0, 0, 0.08);
 
   --text-primary: #182230;
-  --text-secondary: #526071;
-  --text-muted: #7E8D9F;
+  --text-secondary: #4b5868;
+  --text-muted: #596778;
   --text-inverse: #FFFFFF;
   --text-inverse-muted: #BAC7D5;
 
@@ -106,7 +106,27 @@ button {
   cursor: pointer;
   border: none;
   background: none;
-  outline: none;
+}
+
+/* Visible Focus Styles for Full Keyboard Accessibility */
+:focus-visible {
+  outline: 2px solid var(--gold-primary) !important;
+  outline-offset: 3px !important;
+}
+
+/* Accessible Minimum Tap Targets (>= 44px) */
+.btn,
+.tab-btn,
+.nav-link,
+.faq-question,
+.policy-question,
+.lightbox-close,
+.lightbox-nav-btn,
+.mobile-menu-toggle,
+.lang-toggle-btn,
+.room-cta-btn,
+.room-gallery-trigger {
+  min-height: 44px;
 }
 
 /* Container */
@@ -439,6 +459,48 @@ button {
   gap: 0.75rem;
 }
 
+/* Language Toggle Button */
+.lang-toggle-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.lang-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(200, 150, 62, 0.45);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.65rem;
+  min-height: 44px;
+  cursor: pointer;
+  color: var(--canvas-white);
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.lang-toggle-btn:hover {
+  background: rgba(200, 150, 62, 0.18);
+  border-color: var(--gold-primary);
+}
+
+.lang-pill {
+  color: #94a3b8;
+  transition: color var(--transition-fast);
+}
+
+.lang-pill.active {
+  color: var(--gold-primary);
+  font-weight: 700;
+}
+
+.lang-sep {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.75rem;
+}
+
 /* Button Component */
 .btn {
   display: inline-flex;
@@ -527,6 +589,30 @@ button {
   width: 100%;
   height: 100%;
   z-index: 1;
+  overflow: hidden;
+}
+
+.hero-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero-picture-fallback {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
 }
 
 .hero-image {
@@ -536,6 +622,16 @@ button {
   object-position: center;
   transform: scale(1.02);
   transition: transform 8s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-video {
+    display: none !important;
+  }
+  .hero-image {
+    transition: none !important;
+    transform: none !important;
+  }
 }
 
 .hero-overlay {
@@ -1313,6 +1409,19 @@ button {
   gap: 0.25rem;
 }
 
+/* Attractions 8 Default + Show All 20 */
+.sightseeing-card.collapsed-hidden {
+  display: none !important;
+}
+
+.sightseeing-toggle-wrap .toggle-arrow {
+  transition: transform var(--transition-fast);
+}
+
+.sightseeing-toggle-wrap button[aria-expanded="true"] .toggle-arrow {
+  transform: rotate(180deg);
+}
+
 /* ==========================================================================
    PHOTO GALLERY (Filterable Grid with Modal Lightbox)
    ========================================================================== */
@@ -1328,6 +1437,53 @@ button {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1rem;
+}
+
+/* Bento Grid Modern Architecture */
+.gallery-grid.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 240px;
+  gap: 1.25rem;
+}
+
+.gallery-grid.bento-grid .gallery-item {
+  aspect-ratio: auto;
+  height: 100%;
+}
+
+@media (min-width: 992px) {
+  .gallery-grid.bento-grid .gallery-item:nth-child(1) {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+  .gallery-grid.bento-grid .gallery-item:nth-child(5) {
+    grid-column: span 2;
+    grid-row: span 1;
+  }
+  .gallery-grid.bento-grid .gallery-item:nth-child(8) {
+    grid-column: span 2;
+    grid-row: span 1;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 991px) {
+  .gallery-grid.bento-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 220px;
+    gap: 1rem;
+  }
+  .gallery-grid.bento-grid .gallery-item:nth-child(1) {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 640px) {
+  .gallery-grid.bento-grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: 220px;
+    gap: 0.75rem;
+  }
 }
 
 .gallery-item {
