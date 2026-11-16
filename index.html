@@ -245,13 +245,15 @@
 
       <!-- Docked Taj-style Quick Reservation Mask -->
       <div class="container reservation-bar-wrapper">
-        <form id="quickReservationForm" class="reservation-bar" aria-label="Check Room Availability">
+        <form id="quickReservationForm" class="reservation-bar" aria-label="Check Room Availability" name="quick-reservation" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+          <input type="hidden" name="form-name" value="quick-reservation">
+          <p class="hidden" style="display:none;"><label>Don’t fill this out: <input name="bot-field"></label></p>
           <div class="res-field">
             <label for="resCheckin" class="res-label">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
               Check-In Date
             </label>
-            <input type="date" id="resCheckin" class="res-input" required>
+            <input type="date" id="resCheckin" name="checkin" class="res-input" required>
           </div>
 
           <div class="res-field">
@@ -259,7 +261,7 @@
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
               Check-Out Date
             </label>
-            <input type="date" id="resCheckout" class="res-input" required>
+            <input type="date" id="resCheckout" name="checkout" class="res-input" required>
           </div>
 
           <div class="res-field">
@@ -267,7 +269,7 @@
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
               Guests
             </label>
-            <select id="resGuests" class="res-select">
+            <select id="resGuests" name="guests" class="res-select">
               <option value="1-2 Guests">1 - 2 Guests (Couple / Solo)</option>
               <option value="3-4 Guests" selected>3 - 4 Guests (Family)</option>
               <option value="5+ Guests">5+ Guests (Group)</option>
@@ -279,7 +281,7 @@
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 7v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7"></path><path d="M21 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2"></path><path d="M9 12v3"></path><path d="M15 12v3"></path></svg>
               Room Type
             </label>
-            <select id="resRoom" class="res-select">
+            <select id="resRoom" name="room" class="res-select">
               <option value="Deluxe Ambient AC Room" selected>Deluxe Ambient AC Room</option>
               <option value="Executive Suite with Balcony">Executive Suite with Balcony</option>
               <option value="Royal Emerald Dome Room">Royal Emerald Dome Room</option>
@@ -1351,38 +1353,40 @@
             <p class="form-subtitle">Fill out your travel details and connect immediately with our reservations team.</p>
           </div>
 
-          <form id="fullEnquiryForm">
+          <form id="fullEnquiryForm" name="contact-enquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="contact-enquiry">
+            <p class="hidden" style="display:none;"><label>Don’t fill this out: <input name="bot-field"></label></p>
             <div class="form-row">
               <div class="form-group">
                 <label for="enqName" class="form-label">Full Name *</label>
-                <input type="text" id="enqName" class="form-control" placeholder="e.g. Rahul Mukherjee" required>
+                <input type="text" id="enqName" name="name" class="form-control" placeholder="e.g. Rahul Mukherjee" required>
               </div>
               <div class="form-group">
                 <label for="enqPhone" class="form-label">Phone / WhatsApp *</label>
-                <input type="tel" id="enqPhone" class="form-control" placeholder="e.g. 9876543210" required>
+                <input type="tel" id="enqPhone" name="phone" class="form-control" placeholder="e.g. 9876543210" required>
               </div>
             </div>
 
             <div class="form-group">
               <label for="enqEmail" class="form-label">Email Address (Optional)</label>
-              <input type="email" id="enqEmail" class="form-control" placeholder="name@example.com">
+              <input type="email" id="enqEmail" name="email" class="form-control" placeholder="name@example.com">
             </div>
 
             <div class="form-row">
               <div class="form-group">
                 <label for="enqCheckin" class="form-label">Check-In Date *</label>
-                <input type="date" id="enqCheckin" class="form-control" required>
+                <input type="date" id="enqCheckin" name="checkin" class="form-control" required>
               </div>
               <div class="form-group">
                 <label for="enqCheckout" class="form-label">Check-Out Date *</label>
-                <input type="date" id="enqCheckout" class="form-control" required>
+                <input type="date" id="enqCheckout" name="checkout" class="form-control" required>
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group">
                 <label for="enqGuests" class="form-label">Number of Guests *</label>
-                <select id="enqGuests" class="form-control">
+                <select id="enqGuests" name="guests" class="form-control">
                   <option value="1-2 Guests">1 - 2 Guests (Couple / Solo)</option>
                   <option value="3-4 Guests" selected>3 - 4 Guests (Family)</option>
                   <option value="5+ Guests">5+ Guests (Group)</option>
@@ -1390,7 +1394,7 @@
               </div>
               <div class="form-group">
                 <label for="enqRoom" class="form-label">Preferred Room *</label>
-                <select id="enqRoom" class="form-control">
+                <select id="enqRoom" name="room" class="form-control">
                   <option value="Deluxe Ambient AC Room" selected>Deluxe Ambient AC Room</option>
                   <option value="Executive Suite with Balcony">Executive Suite with Balcony</option>
                   <option value="Royal Emerald Dome Room">Royal Emerald Dome Room</option>
@@ -1400,7 +1404,7 @@
 
             <div class="form-group">
               <label for="enqNotes" class="form-label">Special Requests / Questions</label>
-              <textarea id="enqNotes" class="form-control" placeholder="Early check-in request, parking for private car, extra bed, etc."></textarea>
+              <textarea id="enqNotes" name="notes" class="form-control" placeholder="Early check-in request, parking for private car, extra bed, etc."></textarea>
             </div>
 
             <button type="submit" class="btn btn-gold" style="width: 100%; padding: 0.95rem; font-size: 0.95rem;">

@@ -108,33 +108,79 @@ function initHeader() {
   }
 }
 
-// 2. Reservation Bar Initial Dates
+// Date Validation & Netlify Forms Helpers
+function setupDateValidation(checkinEl, checkoutEl) {
+  if (!checkinEl || !checkoutEl) return;
+
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const formatDate = (d) => d.toISOString().split('T')[0];
+  const todayStr = formatDate(today);
+  const tomorrowStr = formatDate(tomorrow);
+
+  checkinEl.min = todayStr;
+  checkoutEl.min = tomorrowStr;
+
+  if (!checkinEl.value) checkinEl.value = todayStr;
+  if (!checkoutEl.value) checkoutEl.value = tomorrowStr;
+
+  checkinEl.addEventListener('change', () => {
+    const checkinDate = new Date(checkinEl.value);
+    if (isNaN(checkinDate.getTime())) return;
+
+    const minCheckout = new Date(checkinDate);
+    minCheckout.setDate(minCheckout.getDate() + 1);
+    const minCheckoutStr = formatDate(minCheckout);
+    checkoutEl.min = minCheckoutStr;
+
+    if (!checkoutEl.value || new Date(checkoutEl.value) <= checkinDate) {
+      checkoutEl.value = minCheckoutStr;
+    }
+  });
+
+  checkoutEl.addEventListener('change', () => {
+    if (checkinEl.value && new Date(checkoutEl.value) <= new Date(checkinEl.value)) {
+      const minCheckout = new Date(checkinEl.value);
+      minCheckout.setDate(minCheckout.getDate() + 1);
+      checkoutEl.value = formatDate(minCheckout);
+    }
+  });
+}
+
+function validateDates(checkinVal, checkoutVal) {
+  const todayStr = new Date().toISOString().split('T')[0];
+  if (!checkinVal || checkinVal < todayStr) {
+    alert('Please select a valid Check-In date (today or in the future).');
+    return false;
+  }
+  if (!checkoutVal || checkoutVal <= checkinVal) {
+    alert('Check-Out date must be after Check-In date.');
+    return false;
+  }
+  return true;
+}
+
+async function postToNetlify(form) {
+  try {
+    const formData = new FormData(form);
+    await fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(formData).toString()
+    });
+  } catch (err) {
+    console.warn('Netlify form submission sync:', err);
+  }
+}
+
+// 2. Reservation Bar Initial Dates & WhatsApp + Netlify Form Submit
 function initReservationDates() {
   const checkinInput = document.getElementById('resCheckin');
   const checkoutInput = document.getElementById('resCheckout');
+  setupDateValidation(checkinInput, checkoutInput);
 
-  if (checkinInput && checkoutInput) {
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
-    const formatDate = (d) => d.toISOString().split('T')[0];
-    checkinInput.value = formatDate(today);
-    checkinInput.min = formatDate(today);
-    checkoutInput.value = formatDate(tomorrow);
-    checkoutInput.min = formatDate(tomorrow);
-
-    checkinInput.addEventListener('change', () => {
-      const selected = new Date(checkinInput.value);
-      selected.setDate(selected.getDate() + 1);
-      checkoutInput.min = formatDate(selected);
-      if (new Date(checkoutInput.value) <= new Date(checkinInput.value)) {
-        checkoutInput.value = formatDate(selected);
-      }
-    });
-  }
-
-  // Handle Quick Reservation Bar Submit via WhatsApp
   const quickBar = document.getElementById('quickReservationForm');
   if (quickBar) {
     quickBar.addEventListener('submit', (e) => {
@@ -144,8 +190,20 @@ function initReservationDates() {
       const guests = document.getElementById('resGuests').value;
       const room = document.getElementById('resRoom').value;
 
-      const message = `Hello Hotel Dollhouse (Old Digha),\nI would like to check room availability and best rates:\n- Check-in: ${checkin}\n- Check-out: ${checkout}\n- Guests: ${guests}\n- Preferred Room: ${room}\n\nPlease confirm availability. Thank you!`;
+      if (!validateDates(checkin, checkout)) return;
 
+      const message = `*HOTEL DOLLHOUSE — DIRECT RESERVATION ENQUIRY*\n` +
+        `📍 *Location:* Barrister Colony, Old Digha\n` +
+        `📅 *Check-In:* ${checkin}\n` +
+        `📅 *Check-Out:* ${checkout}\n` +
+        `👥 *Guests:* ${guests}\n` +
+        `🛏️ *Preferred Room:* ${room}\n\n` +
+        `Please confirm availability and direct booking rate. Thank you!`;
+
+      // Post to Netlify forms asynchronously
+      postToNetlify(quickBar);
+
+      // Open WhatsApp directly
       const encoded = encodeURIComponent(message);
       window.open(`https://wa.me/919433171430?text=${encoded}`, '_blank');
     });
@@ -363,8 +421,11 @@ function initFAQAccordion() {
 
 // 6. Contact & Full Enquiry Form Handler
 function initEnquiryForms() {
-  const form = document.getElementById('fullEnquiryForm');
+  const checkinInput = document.getElementById('enqCheckin');
+  const checkoutInput = document.getElementById('enqCheckout');
+  setupDateValidation(checkinInput, checkoutInput);
 
+  const form = document.getElementById('fullEnquiryForm');
   if (form) {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -378,6 +439,8 @@ function initEnquiryForms() {
       const room = document.getElementById('enqRoom').value;
       const notes = document.getElementById('enqNotes').value.trim();
 
+      if (!validateDates(checkin, checkout)) return;
+
       const message = `*NEW RESERVATION ENQUIRY — HOTEL DOLLHOUSE*\n\n` +
         `👤 *Guest Name:* ${name}\n` +
         `📞 *Contact Number:* ${phone}\n` +
@@ -387,12 +450,14 @@ function initEnquiryForms() {
         `👥 *Guests:* ${guests}\n` +
         `🛏️ *Preferred Room:* ${room}\n` +
         (notes ? `📝 *Special Requests:* ${notes}\n\n` : `\n`) +
-        `_Sent via Dollhouse Official Website._`;
+        `_Sent via Hotel Dollhouse Official Website._`;
 
+      // Post to Netlify forms in background
+      postToNetlify(form);
+
+      // Open WhatsApp directly with prefilled message
       const encoded = encodeURIComponent(message);
       window.open(`https://wa.me/919433171430?text=${encoded}`, '_blank');
-
-      alert("Thank you! Opening WhatsApp to connect directly with Hotel Dollhouse's front desk for instant confirmation.");
     });
   }
 }
