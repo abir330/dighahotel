@@ -1,0 +1,20 @@
+{
+  "name": "Hotel Dollhouse Old Digha",
+  "short_name": "Dollhouse",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#081421",
+  "theme_color": "#0F2236",
+  "icons": [
+    {
+      "src": "assets/favicon/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/favicon/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

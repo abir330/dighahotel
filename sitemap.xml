@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://hoteldollhouse.netlify.app/</loc>
+    <lastmod>2026-11-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://hoteldollhouse.netlify.app/" />
+    <xhtml:link rel="alternate" hreflang="bn" href="https://hoteldollhouse.netlify.app/" />
+    <image:image>
+      <image:loc>https://hoteldollhouse.netlify.app/assets/images/hero-banner-exterior.jpg</image:loc>
+      <image:title>Hotel Dollhouse Old Digha</image:title>
+      <image:caption>Hotel Dollhouse exterior facade in Barrister Colony, Old Digha</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://hoteldollhouse.netlify.app/assets/images/room-deluxe-ac-1.jpg</image:loc>
+      <image:title>Deluxe Ambient AC Room</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://hoteldollhouse.netlify.app/assets/images/room-executive-suite.jpg</image:loc>
+      <image:title>Executive Suite with Balcony</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://hoteldollhouse.netlify.app/assets/images/room-deluxe-ac-2.jpg</image:loc>
+      <image:title>Royal Emerald Dome Room</image:title>
+    </image:image>
+  </url>
+</urlset>
