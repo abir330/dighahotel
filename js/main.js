@@ -4,7 +4,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  initMadeByDropdown();
+  initLiveWeather();
   initHeader();
   initReservationDates();
   initGalleryFilterAndModal();
@@ -13,33 +13,41 @@ document.addEventListener('DOMContentLoaded', () => {
   initEnquiryForms();
 });
 
-// 0. Made By Click-Down Dropdown Menu
-function initMadeByDropdown() {
-  const dropdown = document.getElementById('madeByDropdown');
-  const trigger = document.getElementById('madeByTrigger');
+// 0. Live Coastal Weather via Open-Meteo (Old Digha: Lat 21.6278, Lon 87.5323)
+async function initLiveWeather() {
+  const weatherEl = document.getElementById('liveWeatherText');
+  if (!weatherEl) return;
 
-  if (dropdown && trigger) {
-    trigger.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isOpen = dropdown.classList.toggle('open');
-      trigger.setAttribute('aria-expanded', isOpen);
-    });
+  const wmoWeather = {
+    0: 'Sunny Beach',
+    1: 'Mainly Clear',
+    2: 'Partly Cloudy',
+    3: 'Gentle Sea Breeze',
+    45: 'Coastal Fog',
+    48: 'Foggy Breeze',
+    51: 'Light Coastal Drizzle',
+    53: 'Passing Drizzle',
+    55: 'Dense Drizzle',
+    61: 'Light Ocean Rain',
+    63: 'Moderate Rain',
+    65: 'Heavy Coastal Rain',
+    80: 'Passing Showers',
+    81: 'Coastal Showers',
+    82: 'Tropical Downpour',
+    95: 'Thunderstorm',
+    96: 'Storm with Hail'
+  };
 
-    // Close when clicking anywhere outside
-    document.addEventListener('click', (e) => {
-      if (!dropdown.contains(e.target)) {
-        dropdown.classList.remove('open');
-        trigger.setAttribute('aria-expanded', 'false');
-      }
-    });
-
-    // Close on Escape key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && dropdown.classList.contains('open')) {
-        dropdown.classList.remove('open');
-        trigger.setAttribute('aria-expanded', 'false');
-      }
-    });
+  try {
+    const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=21.6278&longitude=87.5323&current=temperature_2m,weather_code');
+    if (!res.ok) throw new Error('Weather API network error');
+    const data = await res.json();
+    const temp = Math.round(data.current.temperature_2m);
+    const code = data.current.weather_code;
+    const condition = wmoWeather[code] || 'Gentle Sea Breeze';
+    weatherEl.textContent = `${temp}°C · ${condition}`;
+  } catch (err) {
+    weatherEl.textContent = '28°C · Gentle Sea Breeze';
   }
 }
 
