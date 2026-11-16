@@ -110,6 +110,18 @@ function initHeader() {
   }
 }
 
+// Defensive Security Helper: HTML Entity Escaping against DOM-based XSS
+function escapeHTML(str) {
+  if (typeof str !== 'string') return '';
+  return str.replace(/[&<>'"]/g, tag => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    "'": '&#39;',
+    '"': '&quot;'
+  }[tag] || tag));
+}
+
 // Date Validation & Netlify Forms Helpers
 function setupDateValidation(checkinEl, checkoutEl) {
   if (!checkinEl || !checkoutEl) return;
@@ -205,9 +217,9 @@ function initReservationDates() {
       // Post to Netlify forms asynchronously
       postToNetlify(quickBar);
 
-      // Open WhatsApp directly
+      // Open WhatsApp directly with opener isolation
       const encoded = encodeURIComponent(message);
-      window.open(`https://wa.me/919433171430?text=${encoded}`, '_blank');
+      window.open(`https://wa.me/919433171430?text=${encoded}`, '_blank', 'noopener,noreferrer');
     });
   }
 }
@@ -589,21 +601,29 @@ async function initReviews() {
     if (!Array.isArray(reviews) || reviews.length === 0) return;
 
     const html = reviews.map(rev => {
-      const initials = rev.name.split(' ').map(n => n[0]).filter(Boolean).slice(0, 2).join('').toUpperCase();
-      const stars = '★'.repeat(rev.rating || 5);
+      const name = escapeHTML(rev.name || '');
+      const initials = name.split(' ').map(n => n[0]).filter(Boolean).slice(0, 2).join('').toUpperCase();
+      const rating = Number.isInteger(rev.rating) ? Math.min(Math.max(rev.rating, 1), 5) : 5;
+      const stars = '★'.repeat(rating);
+      const title = escapeHTML(rev.title || '');
+      const comment = escapeHTML(rev.comment || '');
+      const room = escapeHTML(rev.room || '');
+      const location = escapeHTML(rev.location || '');
+      const date = escapeHTML(rev.date || '');
+
       return `
         <article class="review-card">
           <div class="review-header">
             <div class="review-stars">${stars}</div>
-            <span class="review-date">${rev.date}</span>
+            <span class="review-date">${date}</span>
           </div>
-          <h3 class="review-title">${rev.title}</h3>
-          <p class="review-comment">“${rev.comment}”</p>
+          <h3 class="review-title">${title}</h3>
+          <p class="review-comment">“${comment}”</p>
           <div class="review-author-wrap">
             <div class="review-avatar">${initials}</div>
             <div class="review-author-meta">
-              <span class="review-author-name">${rev.name}</span>
-              <span class="review-author-room">${rev.room} · ${rev.location}</span>
+              <span class="review-author-name">${name}</span>
+              <span class="review-author-room">${room} · ${location}</span>
             </div>
           </div>
         </article>
@@ -710,9 +730,9 @@ function initEnquiryForms() {
       // Post to Netlify forms in background
       postToNetlify(form);
 
-      // Open WhatsApp directly with prefilled message
+      // Open WhatsApp directly with prefilled message and opener isolation
       const encoded = encodeURIComponent(message);
-      window.open(`https://wa.me/919433171430?text=${encoded}`, '_blank');
+      window.open(`https://wa.me/919433171430?text=${encoded}`, '_blank', 'noopener,noreferrer');
     });
   }
 }
