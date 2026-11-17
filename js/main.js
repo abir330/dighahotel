@@ -6,6 +6,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   initLiveWeather();
   initHeader();
+  initMadeByDropdown();
   initHeroMotion();
   initLanguageToggle();
   initReservationDates();
@@ -108,6 +109,37 @@ function initHeader() {
       }
     });
   }
+}
+
+// 1b. Made By Dropdown Component (Click-down option beside Dollhouse Logo)
+function initMadeByDropdown() {
+  const dropdown = document.getElementById('madeByDropdown');
+  const trigger = document.getElementById('madeByTrigger');
+
+  if (!dropdown || !trigger) return;
+
+  trigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = dropdown.classList.toggle('open');
+    trigger.setAttribute('aria-expanded', isOpen);
+  });
+
+  // Close when clicking outside
+  document.addEventListener('click', (e) => {
+    if (dropdown.classList.contains('open') && !dropdown.contains(e.target)) {
+      dropdown.classList.remove('open');
+      trigger.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // Close on Escape key and return focus
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && dropdown.classList.contains('open')) {
+      dropdown.classList.remove('open');
+      trigger.setAttribute('aria-expanded', 'false');
+      trigger.focus();
+    }
+  });
 }
 
 // Defensive Security Helper: HTML Entity Escaping against DOM-based XSS
