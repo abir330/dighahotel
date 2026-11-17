@@ -81,6 +81,7 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 body {
@@ -517,14 +518,33 @@ button {
   transition: all var(--transition-smooth);
 }
 
-.btn-gold {
+.btn-gold,
+button.btn-gold,
+a.btn-gold {
   background-color: var(--gold-primary);
-  color: var(--navy-dark);
+  color: var(--navy-dark) !important;
   box-shadow: 0 4px 14px rgba(197, 155, 39, 0.35);
+  font-weight: 700;
+  text-decoration: none;
 }
 
-.btn-gold:hover {
+.btn-gold *,
+button.btn-gold *,
+a.btn-gold * {
+  color: var(--navy-dark) !important;
+}
+
+.btn-gold svg,
+button.btn-gold svg,
+a.btn-gold svg {
+  stroke: var(--navy-dark);
+}
+
+.btn-gold:hover,
+button.btn-gold:hover,
+a.btn-gold:hover {
   background-color: var(--gold-hover);
+  color: var(--navy-dark) !important;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(197, 155, 39, 0.45);
 }
@@ -783,6 +803,41 @@ button {
 .res-action {
   display: flex;
   align-items: center;
+}
+
+.res-action .btn {
+  width: 100%;
+  height: 48px;
+  background-color: var(--gold-primary);
+  color: var(--navy-dark) !important;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: none;
+  cursor: pointer;
+}
+
+.res-action .btn *,
+.res-action .btn span {
+  color: var(--navy-dark) !important;
+  font-weight: 700;
+}
+
+.res-action .btn svg {
+  fill: currentColor;
+  stroke: none;
+  flex-shrink: 0;
+}
+
+.res-action .btn:hover {
+  background-color: var(--gold-hover);
+  color: var(--navy-dark) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(197, 155, 39, 0.45);
 }
 
 /* ==========================================================================
@@ -1110,7 +1165,7 @@ button {
    ========================================================================== */
 .rooms-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
   gap: var(--space-lg);
 }
 
@@ -1351,7 +1406,7 @@ button {
 
 .sightseeing-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
   gap: 1.25rem;
 }
 
@@ -2074,6 +2129,75 @@ textarea.form-control {
   .lightbox-next { right: 10px; }
 }
 
+@media (max-width: 991px) {
+  /* Navigation Drawer for Tablet & Mobile */
+  .nav-menu {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 64px);
+    background: rgba(10, 25, 42, 0.98);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 2rem 1.5rem calc(2rem + 70px);
+    gap: 1.25rem;
+    overflow-y: auto;
+    border-bottom: 2px solid var(--gold-primary);
+    transform: translateY(-120%);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 99;
+  }
+  .nav-menu.open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+  .nav-menu .nav-link {
+    font-size: 1.15rem;
+    font-weight: 600;
+    padding: 0.65rem 0;
+    width: 100%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .mobile-menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    color: var(--canvas-white);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+
+  /* Hide redundant header CTAs on tablet & mobile */
+  .header-cta-group .btn-whatsapp,
+  .header-cta-group .btn-gold {
+    display: none !important;
+  }
+
+  /* Prevent hero overflow and card collision on tablet & mobile */
+  .hero-section {
+    min-height: auto;
+    overflow: visible;
+    padding-bottom: 2rem;
+  }
+  .reservation-bar-wrapper {
+    margin-bottom: 1.5rem;
+    margin-top: 1rem;
+  }
+  #about {
+    padding-top: var(--space-2xl) !important;
+  }
+}
+
 @media (max-width: 768px) {
   /* Prevent iOS Safari auto-zoom on input focus */
   input[type="text"],
@@ -2137,55 +2261,6 @@ textarea.form-control {
     font-size: 0.72rem;
   }
 
-  .nav-menu {
-    position: fixed;
-    top: 64px;
-    left: 0;
-    width: 100%;
-    height: calc(100vh - 64px);
-    background: rgba(10, 25, 42, 0.98);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 2rem 1.5rem calc(2rem + 70px);
-    gap: 1.25rem;
-    overflow-y: auto;
-    border-bottom: 2px solid var(--gold-primary);
-    transform: translateY(-120%);
-    opacity: 0;
-    visibility: hidden;
-    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, visibility 0.3s ease;
-    z-index: 99;
-  }
-  .nav-menu.open {
-    transform: translateY(0);
-    opacity: 1;
-    visibility: visible;
-  }
-  .nav-menu .nav-link {
-    font-size: 1.15rem;
-    font-weight: 600;
-    padding: 0.65rem 0;
-    width: 100%;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  .mobile-menu-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    color: var(--canvas-white);
-    background: transparent;
-    border: none;
-    cursor: pointer;
-  }
-  .header-cta-group .btn-gold {
-    display: none;
-  }
-
   /* Hero & Reservation */
   .hero-content {
     padding-top: 1.5rem;
@@ -2221,6 +2296,18 @@ textarea.form-control {
   .res-action .btn {
     width: 100%;
     height: 48px;
+    background-color: var(--gold-primary) !important;
+    color: #081421 !important;
+    font-weight: 700 !important;
+  }
+  .res-action .btn *,
+  .res-action .btn span {
+    color: #081421 !important;
+    font-weight: 700 !important;
+  }
+  .res-action .btn svg {
+    fill: currentColor !important;
+    stroke: none !important;
   }
 
   /* Rooms Grid */

@@ -17,3 +17,9 @@ __pycache__/
 
 # Lighthouse Reports
 lighthouse-*.json
+
+# User reference screenshots & test assets
+ss for issue fixing/
+*.png
+*.jpg.tmp
+
