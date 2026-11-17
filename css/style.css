@@ -365,6 +365,11 @@ button {
   transition: background-color var(--transition-smooth), box-shadow var(--transition-smooth);
 }
 
+.site-header .container {
+  max-width: 1440px;
+  width: 100%;
+}
+
 .site-header.scrolled {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
   background-color: rgba(8, 20, 33, 0.98);
@@ -375,13 +380,16 @@ button {
   justify-content: space-between;
   align-items: center;
   height: var(--header-height);
+  width: 100%;
+  gap: 0.5rem;
 }
 
 /* Header Left Group (Made By + Dollhouse Logo) */
 .header-left-group {
   display: flex;
   align-items: center;
-  gap: 1.15rem;
+  gap: 0.75rem;
+  flex-shrink: 0;
 }
 
 .header-left-group .made-by-dropdown {
@@ -401,12 +409,13 @@ button {
 
 .brand-title {
   font-family: var(--font-serif);
-  font-size: 1.6rem;
+  font-size: 1.45rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: var(--canvas-white);
   line-height: 1.1;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .brand-title span {
@@ -414,8 +423,8 @@ button {
 }
 
 .brand-subtitle {
-  font-size: 0.68rem;
-  letter-spacing: 0.22em;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--gold-light);
   font-weight: 500;
@@ -426,18 +435,20 @@ button {
 .nav-menu {
   display: flex;
   align-items: center;
-  gap: 1.85rem;
+  gap: 0.5rem;
   list-style: none;
+  flex-shrink: 1;
 }
 
 .nav-link {
-  font-size: 0.875rem;
-  font-weight: 500;
-  letter-spacing: 0.05em;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   color: #D1D9E2;
   position: relative;
-  padding: 0.5rem 0;
+  padding: 0.35rem 0.2rem;
+  white-space: nowrap;
 }
 
 .nav-link::after {
@@ -464,7 +475,28 @@ button {
 .header-cta-group {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.55rem;
+  flex-shrink: 0;
+}
+
+.header-cta-group .btn-whatsapp {
+  padding: 0.42rem 0.75rem;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.header-cta-group .btn-gold {
+  padding: 0.42rem 0.75rem;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+@media (max-width: 1400px) {
+  .header-cta-group .btn-gold {
+    display: none !important;
+  }
 }
 
 /* Language Toggle Button */
@@ -2097,6 +2129,40 @@ textarea.form-control {
 }
 
 /* ==========================================================================
+   BLOCK & HIDE NETLIFY INJECTED BADGE (Unblocks WhatsApp & Actions)
+   ========================================================================== */
+#nl-badge-frame,
+iframe#nl-badge-frame,
+iframe[title*="Netlify" i],
+iframe[title*="Powered by Netlify" i],
+iframe[src*="netlify" i],
+[id*="nl-badge" i],
+[class*="nl-badge" i],
+.nl-badge-frame,
+.netlify-badge,
+#netlify-badge,
+div[id*="nl-badge" i],
+div[class*="nl-badge" i],
+a[href*="netlify.com"][class*="badge" i],
+a[aria-label*="Netlify" i],
+[data-netlify-badge] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  max-width: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  position: absolute !important;
+  left: -9999px !important;
+  bottom: -9999px !important;
+  z-index: -999999 !important;
+}
+
+/* ==========================================================================
    RESPONSIVE MEDIA QUERIES (Comprehensive Mobile Optimization)
    ========================================================================== */
 
@@ -2107,35 +2173,54 @@ textarea.form-control {
   }
 }
 
-@media (max-width: 1024px) {
-  .reservation-section {
-    margin-top: -30px;
-    margin-bottom: 2rem;
+/* Compact Laptop & Netbook Header Optimization (1201px to 1366px) */
+@media (max-width: 1366px) {
+  .site-header .container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
   }
-  .reservation-bar {
-    grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
+  .header-inner {
+    gap: 0.35rem;
   }
-  .res-field {
-    border-right: none;
-    border-bottom: 1px solid var(--border-light);
-    padding-bottom: 0.75rem;
+  .header-left-group {
+    gap: 0.5rem;
   }
-  .res-action {
-    grid-column: span 2;
+  .brand-title {
+    font-size: 1.25rem;
+    letter-spacing: 0.04em;
   }
-  .about-grid,
-  .contact-grid {
-    grid-template-columns: 1fr;
+  .brand-subtitle {
+    display: none;
   }
-  .footer-grid {
-    grid-template-columns: 1fr 1fr;
+  .made-by-trigger {
+    padding: 0.22rem 0.5rem;
+    font-size: 0.70rem;
   }
-  .lightbox-prev { left: 10px; }
-  .lightbox-next { right: 10px; }
+  .nav-menu {
+    gap: 0.35rem;
+  }
+  .nav-link {
+    font-size: 0.70rem;
+    padding: 0.3rem 0.12rem;
+    letter-spacing: 0.01em;
+  }
+  .header-cta-group {
+    gap: 0.4rem;
+  }
+  .header-cta-group .btn-whatsapp {
+    padding: 0.36rem 0.65rem;
+    font-size: 0.72rem;
+  }
+  .header-cta-group .btn-gold {
+    display: none !important;
+  }
+  .lang-toggle-btn {
+    padding: 0.2rem 0.4rem;
+    font-size: 0.70rem;
+  }
 }
 
-@media (max-width: 991px) {
+@media (max-width: 1200px) {
   /* Navigation Drawer for Tablet & Mobile */
   .nav-menu {
     position: fixed;
@@ -2183,8 +2268,7 @@ textarea.form-control {
     cursor: pointer;
   }
 
-  /* Hide redundant header CTAs on tablet & mobile */
-  .header-cta-group .btn-whatsapp,
+  /* Redundant contact button hidden; keep WhatsApp accessible */
   .header-cta-group .btn-gold {
     display: none !important;
   }
@@ -2194,10 +2278,34 @@ textarea.form-control {
     min-height: auto;
     padding: calc(64px + 2rem) 0 3.5rem;
   }
+}
+
+@media (max-width: 1024px) {
   .reservation-section {
     margin-top: -30px;
     margin-bottom: 2rem;
   }
+  .reservation-bar {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+  .res-field {
+    border-right: none;
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 0.75rem;
+  }
+  .res-action {
+    grid-column: span 2;
+  }
+  .about-grid,
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .lightbox-prev { left: 10px; }
+  .lightbox-next { right: 10px; }
 }
 
 @media (max-width: 768px) {
@@ -2261,6 +2369,10 @@ textarea.form-control {
   .made-by-trigger {
     padding: 0.2rem 0.5rem;
     font-size: 0.72rem;
+  }
+  .header-cta-group .btn-whatsapp,
+  .header-cta-group .btn-gold {
+    display: none !important;
   }
 
   /* Hero & Reservation */

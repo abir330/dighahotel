@@ -4,6 +4,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  initNetlifyBadgeRemover();
   initLiveWeather();
   initHeader();
   initMadeByDropdown();
@@ -17,6 +18,59 @@ document.addEventListener('DOMContentLoaded', () => {
   initFAQAccordion();
   initEnquiryForms();
 });
+
+// Run badge purge immediately at script parse time
+initNetlifyBadgeRemover();
+
+// Netlify Injected Badge Auto-Remover (Unblocks WhatsApp & Touch Targets)
+function initNetlifyBadgeRemover() {
+  const BADGE_SELECTORS = [
+    '#nl-badge-frame',
+    'iframe#nl-badge-frame',
+    'iframe[title*="Netlify" i]',
+    'iframe[title*="Powered by Netlify" i]',
+    'iframe[src*="netlify" i]',
+    '[id*="nl-badge" i]',
+    '[class*="nl-badge" i]',
+    '.nl-badge-frame',
+    '.netlify-badge',
+    '#netlify-badge',
+    'div[id*="nl-badge" i]',
+    'div[class*="nl-badge" i]',
+    'a[href*="netlify.com"][class*="badge" i]',
+    'a[aria-label*="Netlify" i]',
+    '[data-netlify-badge]'
+  ];
+
+  function purgeBadge() {
+    try {
+      BADGE_SELECTORS.forEach(selector => {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach(el => {
+          try {
+            el.style.setProperty('display', 'none', 'important');
+            el.remove();
+          } catch (e) {}
+        });
+      });
+    } catch (e) {}
+  }
+
+  purgeBadge();
+
+  if (typeof MutationObserver !== 'undefined') {
+    const observer = new MutationObserver(() => {
+      purgeBadge();
+    });
+    if (document.documentElement) {
+      observer.observe(document.documentElement, { childList: true, subtree: true });
+    }
+  } else {
+    setInterval(purgeBadge, 300);
+  }
+
+  window.addEventListener('load', purgeBadge);
+}
 
 // 0. Live Coastal Weather via Open-Meteo (Old Digha: Lat 21.6278, Lon 87.5323)
 async function initLiveWeather() {
