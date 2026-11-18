@@ -23,6 +23,38 @@
   <!-- Preload Critical Hero Image for LCP Optimization -->
   <link rel="preload" as="image" href="assets/images/hero-banner-exterior.webp" type="image/webp" fetchpriority="high">
 
+  <!-- Browser Extension Conflict Guard -->
+  <script>
+    (function() {
+      try {
+        var _solana;
+        Object.defineProperty(window, 'solana', {
+          configurable: true,
+          enumerable: true,
+          get: function() { return _solana; },
+          set: function(val) { _solana = val; }
+        });
+      } catch (e) {}
+
+      window.addEventListener('error', function(e) {
+        var fn = (e && e.filename) || '';
+        var msg = (e && e.message) || '';
+        if (
+          fn.indexOf('contentscript.js') !== -1 ||
+          fn.indexOf('inpage.js') !== -1 ||
+          fn.indexOf('inject.js') !== -1 ||
+          fn.indexOf('chrome-extension:') !== -1 ||
+          msg.indexOf('solana') !== -1 ||
+          msg.indexOf('Permissions policy violation') !== -1
+        ) {
+          if (e.preventDefault) e.preventDefault();
+          if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+          return true;
+        }
+      }, true);
+    })();
+  </script>
+
   <!-- Geo-Targeting Meta Tags -->
   <meta name="geo.region" content="IN-WB">
   <meta name="geo.placename" content="Old Digha, Purba Medinipur, West Bengal, India">
@@ -48,7 +80,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="css/style.css?v=20261118-08">
+  <link rel="stylesheet" href="css/style.css?v=20261118-09">
   <style>
     /* Instant Zero-Frame Netlify Badge Suppression */
     #nl-badge-frame, #nl-hud-frame, iframe[title*="Netlify" i], iframe[title*="Powered by Netlify" i], [id*="nl-badge" i], .nl-badge-frame {
