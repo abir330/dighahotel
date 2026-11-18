@@ -23,9 +23,10 @@
   <!-- Preload Critical Hero Image for LCP Optimization -->
   <link rel="preload" as="image" href="assets/images/hero-banner-exterior.webp" type="image/webp" fetchpriority="high">
 
-  <!-- Browser Extension Conflict Guard -->
+  <!-- Browser Extension Conflict Guard & Error Suppressor -->
   <script>
     (function() {
+      // 1. Solana Web3 Wallet Collision Guard
       try {
         var _solana;
         Object.defineProperty(window, 'solana', {
@@ -36,17 +37,35 @@
         });
       } catch (e) {}
 
+      // 2. Global Extension Error & Policy Violation Suppressor
+      function isExtensionTrace(s) {
+        if (!s) return false;
+        var str = String(s).toLowerCase();
+        return (
+          str.indexOf('contentscript.js') !== -1 ||
+          str.indexOf('inpage.js') !== -1 ||
+          str.indexOf('inject.js') !== -1 ||
+          str.indexOf('chrome-extension:') !== -1 ||
+          str.indexOf('solana') !== -1 ||
+          str.indexOf('permissions policy violation') !== -1 ||
+          str.indexOf('objectmultiplex') !== -1 ||
+          str.indexOf('maxlistenersexceededwarning') !== -1
+        );
+      }
+
       window.addEventListener('error', function(e) {
         var fn = (e && e.filename) || '';
         var msg = (e && e.message) || '';
-        if (
-          fn.indexOf('contentscript.js') !== -1 ||
-          fn.indexOf('inpage.js') !== -1 ||
-          fn.indexOf('inject.js') !== -1 ||
-          fn.indexOf('chrome-extension:') !== -1 ||
-          msg.indexOf('solana') !== -1 ||
-          msg.indexOf('Permissions policy violation') !== -1
-        ) {
+        if (isExtensionTrace(fn) || isExtensionTrace(msg)) {
+          if (e.preventDefault) e.preventDefault();
+          if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+          return true;
+        }
+      }, true);
+
+      window.addEventListener('unhandledrejection', function(e) {
+        var reason = (e && e.reason) ? (e.reason.message || e.reason) : '';
+        if (isExtensionTrace(reason)) {
           if (e.preventDefault) e.preventDefault();
           if (e.stopImmediatePropagation) e.stopImmediatePropagation();
           return true;
@@ -80,7 +99,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="css/style.css?v=20261118-09">
+  <link rel="stylesheet" href="css/style.css?v=20261118-10">
   <style>
     /* Instant Zero-Frame Netlify Badge Suppression */
     #nl-badge-frame, #nl-hud-frame, iframe[title*="Netlify" i], iframe[title*="Powered by Netlify" i], [id*="nl-badge" i], .nl-badge-frame {
