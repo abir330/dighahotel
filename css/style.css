@@ -973,11 +973,39 @@ a.btn-gold:hover {
 /* ==========================================================================
    ABOUT / HERITAGE STORY
    ========================================================================== */
+#about {
+  position: relative;
+  background-color: #0F2236;
+  background-image:
+    linear-gradient(135deg, rgba(15, 34, 54, 0.42) 0%, rgba(10, 25, 42, 0.28) 40%, rgba(15, 34, 54, 0.48) 100%),
+    url('../assets/images/hotel-exterior-day.jpg');
+  background-image:
+    linear-gradient(135deg, rgba(15, 34, 54, 0.42) 0%, rgba(10, 25, 42, 0.28) 40%, rgba(15, 34, 54, 0.48) 100%),
+    image-set(
+      url('../assets/images/hotel-exterior-day.webp') type('image/webp'),
+      url('../assets/images/hotel-exterior-day.jpg') type('image/jpeg')
+    );
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+}
+
 .about-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-2xl);
   align-items: center;
+}
+
+.about-text-content {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 2.5rem 2.25rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(212, 160, 23, 0.35);
+  box-shadow: 0 18px 45px rgba(8, 20, 33, 0.22), 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
 .about-beach-pill {
@@ -986,12 +1014,16 @@ a.btn-gold:hover {
   gap: 0.65rem;
   padding: 0.55rem 1.15rem;
   background: linear-gradient(135deg, rgba(15, 34, 54, 0.95) 0%, rgba(10, 25, 42, 0.98) 100%);
-  color: var(--text-light);
+  color: #FFFFFF;
   border: 1px solid rgba(212, 160, 23, 0.35);
   border-radius: var(--radius-full, 9999px);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
   font-size: 0.82rem;
   margin-bottom: 1.25rem;
+}
+
+.about-beach-pill span {
+  color: #F1F5F9;
 }
 
 .about-beach-pill svg {
@@ -1000,7 +1032,7 @@ a.btn-gold:hover {
 }
 
 .about-beach-pill strong {
-  color: var(--gold-primary);
+  color: var(--gold-light);
   font-weight: 700;
 }
 
@@ -2496,6 +2528,9 @@ a[aria-label*="Netlify" i],
   }
 
   /* About Section */
+  .about-text-content {
+    padding: 1.5rem 1.15rem;
+  }
   .about-beach-pill {
     font-size: 0.76rem;
     padding: 0.5rem 0.85rem;
