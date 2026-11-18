@@ -545,18 +545,20 @@ function initGalleryFilterAndModal() {
   });
 }
 
-// 4.2 Hero Video Prefers-Reduced-Motion Support
+// 4.2 Background Video Prefers-Reduced-Motion Support
 function initHeroMotion() {
-  const video = document.querySelector('.hero-video');
-  if (!video) return;
+  const videos = document.querySelectorAll('.hero-video, .about-video');
+  if (!videos.length) return;
 
   const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
   const handleMotionChange = (e) => {
-    if (e.matches) {
-      video.pause();
-    } else {
-      video.play().catch(() => {});
-    }
+    videos.forEach((video) => {
+      if (e.matches) {
+        video.pause();
+      } else {
+        video.play().catch(() => {});
+      }
+    });
   };
 
   handleMotionChange(motionQuery);
