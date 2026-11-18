@@ -99,7 +99,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="css/style.css?v=20261118-10">
+  <link rel="stylesheet" href="css/style.css?v=20261118-11">
   <style>
     /* Instant Zero-Frame Netlify Badge Suppression */
     #nl-badge-frame, #nl-hud-frame, iframe[title*="Netlify" i], iframe[title*="Powered by Netlify" i], [id*="nl-badge" i], .nl-badge-frame {
@@ -340,8 +340,9 @@
     <!-- Hero Section -->
     <section id="hero" class="hero-section" aria-label="Welcome to Hotel Dollhouse">
       <div class="hero-media-wrapper">
-        <img src="assets/images/hero-banner-exterior.webp" class="hero-backdrop-blur" aria-hidden="true" alt="">
         <picture class="hero-picture-fallback">
+          <source media="(max-width: 768px)" srcset="assets/images/hotel-exterior-day.webp" type="image/webp">
+          <source media="(max-width: 768px)" srcset="assets/images/hotel-exterior-day.jpg" type="image/jpeg">
           <source srcset="assets/images/hero-banner-exterior.webp" type="image/webp">
           <img src="assets/images/hero-banner-exterior.jpg" alt="Architectural daylight facade of Hotel Dollhouse in Old Digha with sunshine yellow walls and ornamental red tiles" class="hero-image" width="1920" height="1080">
         </picture>
